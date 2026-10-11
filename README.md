@@ -12,7 +12,7 @@ At the end, **Benchmarks** opens `appendix.html`, keeping the replay and score c
 
 ## Pitch timing
 
-1. Every offer has a reason — 20 s
+1. Our approach and implementation — 20 s
 2. We turned the data into negotiation leverage — 45 s
 3. We traded terms, not just price — 55 s
 4. Inside one negotiation turn — 70 s

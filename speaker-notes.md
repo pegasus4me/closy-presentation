@@ -2,7 +2,7 @@
 
 English talk track. Six main slides; interactive replay and benchmark charts in `appendix.html` for questions.
 
-## 1 · Every offer has a reason — 0:00–0:20
+## 1 · Our approach and implementation — 0:00–0:20
 
 “We built Closy as an autonomous buyer. Our approach was to use the buyer’s data to defend our requests, calculate the value of concessions, and execute negotiations within the time limit.”
 
