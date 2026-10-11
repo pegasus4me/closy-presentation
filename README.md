@@ -32,6 +32,8 @@ At the end, **Benchmarks** opens `appendix.html`, keeping the replay and score c
 - `check-presentation.cjs`: checks pitch navigation, reveals, keyboard handling and evidence figures.
 - `check-appendix.cjs`: checks the preserved benchmark interactions and chart geometry.
 
+The older seven-slide PDF is retained as `previous-presentation-backup.pdf`; it is not a backup of the new pitch. The team’s short-screen logo adjustment, desktop fit-to-screen behavior and replay-label fix are preserved. Desktop fitting may reduce text size; mobile screens retain scrolling.
+
 ## Validate
 
 ```sh

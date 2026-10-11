@@ -96,3 +96,29 @@ key('Enter');check(0,0);
 key('PageDown');check(0,1);
 key('PageUp');check(0,0);
 console.log('Passed: six slides, five-minute timing, evidence figures, source caveats, progressive reveals, keyboard navigation and appendix link.');
+
+const fitParts = [180, 400].map(height => {
+  const values = new Map();
+  return {height, values, classList:{contains:()=>false}, style:{
+    setProperty(key,value) {values.set(key,value);}, removeProperty(key) {values.delete(key);}
+  }};
+});
+fitParts.forEach((part,index) => {part.getBoundingClientRect = () => {
+  const top = 100 + fitParts.slice(0,index).reduce((sum,p)=>sum+p.height*Number(p.values.get('zoom') || 1),0);
+  return {top,bottom:top+part.height*Number(part.values.get('zoom') || 1)};
+};});
+const fitWindow = {innerWidth:1280,innerHeight:600,events:{},addEventListener(name,fn){this.events[name]=fn;}};
+const cover = {}, active = {children:fitParts};
+const fitDocument = {querySelectorAll:()=>fitParts.filter(p=>p.values.has('zoom')),
+  querySelector:selector=>selector==='.slide' ? cover : active,addEventListener(){}};
+let printing = false;
+vm.runInNewContext(html.match(/<script id="fit-to-screen">([\s\S]*?)<\/script>/)[1], {
+  document:fitDocument,window:fitWindow,matchMedia:()=>({matches:printing}),requestAnimationFrame:fn=>fn()
+});
+assert(Number(fitParts[0].values.get('zoom')) < 1);
+assert(fitParts[1].getBoundingClientRect().bottom <= fitWindow.innerHeight-88);
+printing = true; fitWindow.events.beforeprint();
+assert(!fitParts[0].values.has('zoom'));
+printing = false; fitWindow.innerWidth = 700; fitWindow.events.resize();
+assert(!fitParts[0].values.has('zoom'), 'Mobile layout must retain native scrolling');
+console.log('Passed: inherited desktop screen fitting, print reset and mobile scrolling.');
