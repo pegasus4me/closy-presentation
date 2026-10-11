@@ -123,6 +123,7 @@
         flex-direction: column;
         align-items: center;
         padding-top: 120px;
+        padding-bottom: 88px;
       }
 
       .slide:not(:first-child) .slide-title {
@@ -1787,6 +1788,62 @@ updateCaseOptions();
 renderSavingsOverview();
 showBenchmarkStep(0);
 
+    </script>
+    <script id="fit-to-screen">
+      // Scales the active slide down when it is taller than the screen, so nothing scrolls
+      // and the fixed navigation never covers content. Slides that fit are left untouched.
+      (() => {
+        const navigationClearance = 88;
+        const contentWidth = 80; // percent: .slide-title and .slide-content
+        // Smallest zoom each slide has needed, so a slide keeps one size while its replay
+        // or benchmark steps change instead of jumping between states.
+        const settledZoom = new Map();
+
+        function reset() {
+          document.querySelectorAll('.slide > [style*="zoom"]').forEach(part => {
+            ['zoom', 'width', 'max-width'].forEach(property => part.style.removeProperty(property));
+          });
+        }
+
+        function applyZoom(parts, zoom) {
+          parts.forEach(part => {
+            part.style.setProperty('zoom', zoom.toFixed(3));
+            part.style.setProperty('width', `${(contentWidth * zoom).toFixed(2)}%`);
+            part.style.setProperty('max-width', `${(contentWidth * zoom).toFixed(2)}%`);
+          });
+        }
+
+        function fitActiveSlide() {
+          reset();
+          if (matchMedia('print').matches) return;
+          const slide = document.querySelector('.slide:not([hidden])');
+          const parts = [...slide.children].filter(part => !part.classList.contains('slide-header'));
+          if (slide === document.querySelector('.slide') || !parts.length) return;
+          const top = parts[0].getBoundingClientRect().top;
+          const available = window.innerHeight - navigationClearance - top;
+          let zoom = settledZoom.get(slide) || 1;
+          if (zoom < 1) applyZoom(parts, zoom);
+          // A zoomed percentage width resolves to the same screen width, so the width is scaled
+          // with the zoom to keep the layout identical. Text rewrapping can still differ slightly.
+          for (let attempt = 0; attempt < 4; attempt++) {
+            const needed = parts[parts.length - 1].getBoundingClientRect().bottom - top;
+            if (needed <= available || zoom <= 0.5) break;
+            zoom = Math.max(0.5, zoom * available / needed - 0.005);
+            applyZoom(parts, zoom);
+          }
+          if (zoom < 1) settledZoom.set(slide, zoom);
+        }
+
+        const scheduleFit = () => requestAnimationFrame(fitActiveSlide);
+        ['click', 'keydown', 'input', 'change'].forEach(type => document.addEventListener(type, scheduleFit));
+        window.addEventListener('resize', () => {
+          settledZoom.clear();
+          scheduleFit();
+        });
+        window.addEventListener('beforeprint', reset);
+        window.addEventListener('afterprint', scheduleFit);
+        scheduleFit();
+      })();
     </script>
   </body>
 </html>
