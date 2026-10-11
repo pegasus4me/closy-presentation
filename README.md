@@ -1,6 +1,6 @@
 # Closy — Presentation
 
-Six-slide HTML presentation for Closy, an AI buyer that negotiates with suppliers by email, built for the Tacto Negotiation Arena.
+Seven-slide HTML presentation for Closy, an AI buyer that negotiates with suppliers by email, built for the Tacto Negotiation Arena.
 
 ## Open the presentation
 
@@ -8,9 +8,12 @@ Open `presentation.html` in a browser. It works locally without a server or an i
 
 Use the **Previous / Next** buttons or the arrow keys to navigate. Slide 3 reveals one part of the recorded payment trade at a time. The final slide reveals one architecture block at a time.
 
+Slide 4 ("The proof was in the contract.") is optional: delete its `<section aria-labelledby="slide-proof-title">` to present six slides. Navigation and `check-presentation.cjs` count the slides from the HTML, so nothing else needs to change. Slides taller than the screen are scaled down to fit above the navigation.
+
 ## Files
 
 - `presentation.html`: the complete presentation, including embedded assets, data and scripts.
+- `presentation-backup.pdf`: offline backup of the seven slides, captured on screen at 1920×1080 with slides 3 and 7 fully revealed. Images only: links are not clickable and slide 6 shows its first step.
 - `presentation-charts.js`: source copy of the interactive replay and benchmark code embedded in the HTML.
 - `negotiation-chart-data.json`: source copy of the data embedded in the HTML.
 - `benchmark-summary.json`: benchmark summary snapshot.
