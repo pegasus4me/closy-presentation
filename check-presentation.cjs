@@ -15,6 +15,9 @@ assert(html.includes('prefers-reduced-motion:reduce'));
 assert(html.includes('@media print'));
 assert(!html.includes('<script src='));
 assert(!html.includes('The lowest price'));
+assert(!sections[0].includes('We turn buyer data'));
+assert(!sections[0].includes('cover-flow'));
+assert(!sections[0].includes('class="reveal'));
 assert(!html.includes('id="benchmark-plot"'));
 assert(sections[1].includes(`${evidence.p01.notice_days}<span>days`));
 assert(sections[1].includes(`${evidence.p01.contract_notice_days}<span>days`));
@@ -50,7 +53,7 @@ const slides = sections.map(section => ({hidden:false,
   blocks: Array.from({length:(section.match(/class="reveal /g) || []).length}, block),
   querySelectorAll(selector) {assert.equal(selector, '.reveal');return this.blocks;}
 }));
-assert.deepEqual(slides.map(s => s.blocks.length), [3,3,3,6,3,4]);
+assert.deepEqual(slides.map(s => s.blocks.length), [0,3,3,6,3,4]);
 const document = {events:{}, querySelectorAll(selector) {assert.equal(selector,'.slide');return slides;},
   getElementById(id) {assert(elements.has(id), `Missing element ${id}`);return elements.get(id);},
   addEventListener(type, fn) {this.events[type] = fn;}};
@@ -67,7 +70,7 @@ function check(index, step) {
     assert.equal(b.inert,pending);
     assert.equal(b.classes.has('is-pending'),pending);
   }));
-  assert.equal(elements.get('slide-counter').textContent,`${index+1} / 6 · ${step+1} / ${slides[index].blocks.length}`);
+  assert.equal(elements.get('slide-counter').textContent,`${index+1} / 6` + (slides[index].blocks.length ? ` · ${step+1} / ${slides[index].blocks.length}` : ''));
 }
 check(0,0);
 assert(elements.get('previous-slide').disabled);
@@ -87,13 +90,13 @@ assert(elements.get('appendix-link').hidden);
 const key = (name, options={}) => document.events.keydown({key:name,target:{closest:()=>null},preventDefault(){},...options});
 key('End');check(5,3);
 key('Home');check(0,0);
-key('ArrowRight');check(0,1);
+key('ArrowRight');check(1,0);
 key('ArrowLeft');check(0,0);
 key(' ',{target:{closest:selector=>selector.includes('button') ? {} : null}});check(0,0);
 key('ArrowRight',{ctrlKey:true});check(0,0);
 key('ArrowRight',{target:{closest:()=>({})}});check(0,0);
 key('Enter');check(0,0);
-key('PageDown');check(0,1);
+key('PageDown');check(1,0);
 key('PageUp');check(0,0);
 console.log('Passed: six slides, five-minute timing, evidence figures, source caveats, progressive reveals, keyboard navigation and appendix link.');
 
