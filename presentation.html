@@ -707,6 +707,20 @@
         }
       }
 
+      @media (max-height: 820px) {
+        .slide-header {
+          padding: 18px 28px;
+        }
+
+        .logo {
+          width: min(160px, 65vw);
+        }
+
+        .slide:not(:first-child):not([hidden]) {
+          padding-top: 88px;
+        }
+      }
+
       @media (max-width: 1200px) {
         .chart-layout {
           grid-template-columns: 1fr;
