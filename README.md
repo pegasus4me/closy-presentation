@@ -6,7 +6,7 @@ Six-slide HTML presentation for Closy, an AI buyer that negotiates with supplier
 
 Open `presentation.html` in a browser. It works locally without a server or an installation: the logo, background image, chart data and JavaScript are embedded in the HTML.
 
-Use the **Previous / Next** buttons or the arrow keys to navigate. The final slide reveals one architecture block at a time.
+Use the **Previous / Next** buttons or the arrow keys to navigate. Slide 3 reveals one part of the recorded payment trade at a time. The final slide reveals one architecture block at a time.
 
 ## Files
 
