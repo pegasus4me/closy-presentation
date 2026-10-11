@@ -23,7 +23,7 @@ assert(!html.includes('The lowest price'));
 assert(!sections[0].includes('We turn buyer data'));
 // Slide 1: the zero-trust approach, five steps ending on the guard.
 assert(sections[0].includes('Closy · Tacto Negotiation Arena'));
-assert(sections[0].includes('we didn’t trust the LLM'));
+assert(sections[0].includes('security engineers, not ML researchers'));
 for (const step of ['01 · Company data','02 · Economic engine','03 · Evidence engine','04 · Policy','05 · Guard → email']) assert(sections[0].includes(step));
 assert(sections[0].includes('hollerau/<wbr>pegasus/<wbr>guard.py') && sections[0].includes('9/10') && sections[0].includes('0/24'));
 assert(!/prompt injection/i.test(html), 'No prompt-injection claim: the project has none');
