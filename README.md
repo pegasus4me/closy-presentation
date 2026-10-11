@@ -1,6 +1,6 @@
 # Closy — Presentation
 
-Seven-slide HTML presentation for Closy, an AI buyer that negotiates with suppliers by email, built for the Tacto Negotiation Arena.
+Eight-slide HTML presentation for Closy, an AI buyer that negotiates with suppliers by email, built for the Tacto Negotiation Arena.
 
 ## Open the presentation
 
@@ -8,12 +8,14 @@ Open `presentation.html` in a browser. It works locally without a server or an i
 
 Use the **Previous / Next** buttons or the arrow keys to navigate. Slide 3 reveals one part of the recorded payment trade at a time. The final slide reveals one architecture block at a time.
 
-Slide 4 ("The proof was in the contract.") is optional: delete its `<section aria-labelledby="slide-proof-title">` to present six slides. Navigation and `check-presentation.cjs` count the slides from the HTML, so nothing else needs to change. Slides taller than the screen are scaled down to fit above the navigation.
+Two slides are optional: slide 4 ("The proof was in the contract.", `<section aria-labelledby="slide-proof-title">`) and slide 7 ("Why did Closy write that?", `<section id="slide-why">`). Delete either section, or both, to shorten the deck. Navigation and `check-presentation.cjs` count the slides from the HTML, and slide 7's script does nothing once its section is gone, so nothing else needs to change.
+
+Slide 7 lists Closy's recorded first P01 email sentence by sentence; select one (click, or Tab then Enter) to see the evidence it cites, the arena's check, the supplier's reply and the measured effect of that argument type. Its data is embedded in the `why-data` block, extracted from `analysis/pegasus_data/sessions/P01-3a0b48ea4e9dae20.json` in the agent repository. Slides taller than the screen are scaled down to fit above the navigation.
 
 ## Files
 
 - `presentation.html`: the complete presentation, including embedded assets, data and scripts.
-- `presentation-backup.pdf`: offline backup of the seven slides, captured on screen at 1920×1080 with slides 3 and 7 fully revealed. Images only: links are not clickable and slide 6 shows its first step.
+- `presentation-backup.pdf`: offline backup of the eight slides, captured on screen at 1920×1080 with slides 3 and 8 fully revealed. Images only: links are not clickable, slide 6 shows its first step and slide 7 its default sentence.
 - `presentation-charts.js`: source copy of the interactive replay and benchmark code embedded in the HTML.
 - `negotiation-chart-data.json`: source copy of the data embedded in the HTML.
 - `benchmark-summary.json`: benchmark summary snapshot.
