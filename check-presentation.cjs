@@ -11,6 +11,9 @@ assert.deepEqual(sections.map(s => Number(s.match(/data-seconds="(\d+)"/)[1])), 
 assert.equal(evidence.timings_seconds.reduce((sum, n) => sum + n, 0), 300);
 assert.equal((html.match(/class="logo"/g) || []).length, 6);
 assert(html.includes('background-size: cover'));
+assert(html.includes('body::before'));
+assert(html.includes('--presentation-background:'));
+assert(html.includes('.slide {background-color:transparent;background-image:none;}'));
 assert(html.includes('prefers-reduced-motion:reduce'));
 assert(html.includes('@media print'));
 assert(!html.includes('<script src='));
