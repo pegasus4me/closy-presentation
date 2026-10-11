@@ -24,7 +24,12 @@ element('benchmark-case', 'P01');
 const views = ['0', '1', '2'].map(view => {
   const item = element('view-' + view); item.dataset.benchmarkView = view; return item;
 });
-const slides = Array.from({length: 6}, (_, index) => ({hidden: index !== 0}));
+// Counted from the HTML so an optional slide can be removed without editing this check.
+// The benchmarks are always the second-to-last slide and the architecture the last one.
+const slideCount = (html.match(/<section class="slide"/g) || []).length;
+const lastSlide = slideCount - 1;
+const benchmarkSlide = slideCount - 2;
+const slides = Array.from({length: slideCount}, (_, index) => ({hidden: index !== 0}));
 const securityBlocks = Array.from({length: 4}, (_, index) => ({
   attrs: {},
   classes: new Set(index ? ['is-pending'] : []),
@@ -32,11 +37,19 @@ const securityBlocks = Array.from({length: 4}, (_, index) => ({
   setAttribute(name, value) {this.attrs[name] = value;},
 }));
 securityBlocks.forEach(block => {block.classList.owner = block;});
+const concessionBlocks = Array.from({length: 3}, (_, index) => ({
+  attrs: {},
+  classes: new Set(index ? ['is-pending'] : []),
+  classList: {toggle(name, enabled) {this.owner.classes[enabled ? 'add' : 'delete'](name);}},
+  setAttribute(name, value) {this.attrs[name] = value;},
+}));
+concessionBlocks.forEach(block => {block.classList.owner = block;});
 const document = {events: {}, getElementById: id => {
     assert(elements.has(id), 'Missing test element ' + id); return elements.get(id);
   }, addEventListener(type, fn) {this.events[type] = fn;}, querySelectorAll(selector) {
     if (selector === '.slide') return slides;
     if (selector === '.security-reveal') return securityBlocks;
+    if (selector === '.concession-reveal') return concessionBlocks;
     if (selector === '[data-benchmark-view]') return views;
     if (selector.startsWith('#replay-plot')) return [...elements.get('replay-plot').innerHTML.matchAll(/data-round="(\d+)"/g)].map(match => {
       const item = element('point-' + match[1]); item.dataset.round = match[1]; return item;
@@ -55,31 +68,52 @@ function assertActive(index) {
   assert.equal(slides[index].hidden, false);
 }
 assertActive(0);
-for (let index = 1; index < 6; index++) {elements.get('next-slide').events.click(); assertActive(index);}
-assert.equal(elements.get('slide-counter').textContent, '6 / 6 · 1 / 4');
+elements.get('next-slide').events.click(); assertActive(1);
+elements.get('next-slide').events.click(); assertActive(2);
+assert.equal(elements.get('slide-counter').textContent, `3 / ${slideCount} · 1 / 3`);
+assert.equal(concessionBlocks[0].attrs['aria-hidden'], 'false');
+assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'true');
+for (let step = 1; step < 3; step++) {
+  elements.get('next-slide').events.click(); assertActive(2);
+  assert.equal(concessionBlocks[step].attrs['aria-hidden'], 'false');
+  assert.equal(elements.get('slide-counter').textContent, `3 / ${slideCount} · ${step + 1} / 3`);
+}
+elements.get('previous-slide').events.click(); assertActive(2);
+assert.equal(concessionBlocks[2].attrs['aria-hidden'], 'true');
+elements.get('next-slide').events.click(); assertActive(2);
+for (let index = 3; index < slideCount; index++) {elements.get('next-slide').events.click(); assertActive(index);}
+assert.equal(concessionBlocks[0].attrs['aria-hidden'], 'true');
+assert.equal(elements.get('slide-counter').textContent, `${slideCount} / ${slideCount} · 1 / 4`);
 assert.equal(securityBlocks[0].attrs['aria-hidden'], 'false');
 assert.equal(securityBlocks[1].attrs['aria-hidden'], 'true');
 assert.equal(elements.get('next-slide').disabled, false);
 for (let step = 1; step < 4; step++) {
   elements.get('next-slide').events.click();
-  assertActive(5);
+  assertActive(lastSlide);
   assert.equal(securityBlocks[step].attrs['aria-hidden'], 'false');
-  assert.equal(elements.get('slide-counter').textContent, `6 / 6 · ${step + 1} / 4`);
+  assert.equal(elements.get('slide-counter').textContent, `${slideCount} / ${slideCount} · ${step + 1} / 4`);
 }
 assert(elements.get('next-slide').disabled);
-elements.get('previous-slide').events.click(); assertActive(5);
+elements.get('previous-slide').events.click(); assertActive(lastSlide);
 assert.equal(securityBlocks[3].attrs['aria-hidden'], 'true');
 for (let step = 0; step < 3; step++) elements.get('previous-slide').events.click();
-assertActive(4);
+assertActive(benchmarkSlide);
 const key = name => document.events.keydown({key: name, target: {closest: () => null}, preventDefault() {}});
-key('ArrowRight'); assertActive(5);
+key('ArrowRight'); assertActive(lastSlide);
 assert.equal(securityBlocks[1].attrs['aria-hidden'], 'true');
 key('ArrowRight'); assert.equal(securityBlocks[1].attrs['aria-hidden'], 'false');
 key('ArrowLeft'); assert.equal(securityBlocks[1].attrs['aria-hidden'], 'true');
 key('End'); assert.equal(securityBlocks[3].attrs['aria-hidden'], 'false');
 key('Home'); assertActive(0);
-for (let index = 1; index <= 4; index++) elements.get('next-slide').events.click();
-assertActive(4);
+key('ArrowRight'); key('ArrowRight'); assertActive(2);
+assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'true');
+key('ArrowRight'); assertActive(2);
+assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'false');
+key('ArrowLeft'); assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'true');
+key('Home'); assertActive(0);
+// Two moves reach slide 3, two more reveal its steps, then one move per slide.
+for (let move = 0; move < benchmarkSlide + 2; move++) elements.get('next-slide').events.click();
+assertActive(benchmarkSlide);
 assert.equal(elements.get('negotiation-panel').hidden, true);
 assert.equal(elements.get('benchmark-score-explanation').hidden, false);
 const savingsView = elements.get('benchmark-score-explanation').innerHTML;
@@ -138,4 +172,4 @@ for (const svg of [benchmarkSvg, archiveSvg, replaySvg]) {
 }
 assert.equal(vm.runInContext('escapeChartText("<img onerror=bad>")', context), '&lt;img onerror=bad&gt;');
 if (process.argv[2]) fs.writeFileSync(process.argv[2], JSON.stringify([benchmarkSvg, archiveSvg, replaySvg]));
-console.log('Passed: navigation, replay, three benchmark steps, aggregate savings, filters, reduced motion, source data and SVG geometry.');
+console.log('Passed: navigation, concession reveals, replay, three benchmark steps, aggregate savings, filters, reduced motion, source data and SVG geometry.');
