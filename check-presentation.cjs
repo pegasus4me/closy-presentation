@@ -11,6 +11,8 @@ assert.deepEqual(sections.map(s => Number(s.match(/data-seconds="(\d+)"/)[1])), 
 assert.equal(evidence.timings_seconds.reduce((sum, n) => sum + n, 0), 300);
 assert.equal((html.match(/class="logo"/g) || []).length, 6);
 assert(html.includes('background-size: cover'));
+assert(html.includes('.slide:first-child:not([hidden]) {display:flex'));
+assert(!/\.slide:first-child\s*\{[^}]*display\s*:/.test(html), 'Cover display rule must not override the hidden slide state');
 assert(html.includes('body::before'));
 assert(html.includes('--presentation-background:'));
 assert(html.includes('.slide {background-color:transparent;background-image:none;}'));
