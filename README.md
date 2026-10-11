@@ -11,6 +11,7 @@ Use the **Previous / Next** buttons or the arrow keys to navigate. The final sli
 ## Files
 
 - `presentation.html`: the complete presentation, including embedded assets, data and scripts.
+- `presentation-backup.pdf`: offline backup of the six slides, captured on screen at 1920×1080 with the last slide fully revealed. Images only: links are not clickable and slide 5 shows its first step.
 - `presentation-charts.js`: source copy of the interactive replay and benchmark code embedded in the HTML.
 - `negotiation-chart-data.json`: source copy of the data embedded in the HTML.
 - `benchmark-summary.json`: benchmark summary snapshot.
