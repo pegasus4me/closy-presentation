@@ -20,21 +20,14 @@ assert(html.includes('prefers-reduced-motion:reduce'));
 assert(html.includes('@media print'));
 assert(!html.includes('<script src='));
 assert(!html.includes('The lowest price'));
-assert(!sections[0].includes('We turn buyer data'));
-// Slide 1: the zero-trust approach, five steps ending on the guard.
-assert(sections[0].includes('Closy · Tacto Negotiation Arena'));
-assert(sections[0].includes('security engineers, not ML researchers'));
-for (const step of ['01 · Company data','02 · Economic engine','03 · Evidence engine','04 · Policy','05 · Guard → email']) assert(sections[0].includes(step));
-assert(sections[0].includes('hollerau/<wbr>pegasus/<wbr>guard.py') && sections[0].includes('9/10') && sections[0].includes('0/24'));
-assert(!/prompt injection/i.test(html), 'No prompt-injection claim: the project has none');
+assert(!/we (attacked|tested|ran)[^.<]{0,40}(attack|injection|inference)/i.test(html), 'No claim of attacks run: the project has none');
 assert(!html.includes('id="benchmark-plot"'));
-assert(sections[1].includes(`${evidence.p01.notice_days}<span>days`));
-assert(sections[1].includes(`${evidence.p01.contract_notice_days}<span>days`));
-assert(sections[1].includes(`${evidence.p01.verified_claims} / ${evidence.p01.cited_claims}`));
-assert(sections[2].includes('€137.90') && sections[2].includes('€132.40'));
-assert(sections[2].includes('45 days') && sections[2].includes('14 days'));
-assert(sections[2].includes('15–75 combinations') && sections[2].includes('19 practice cases'));
-assert(sections[3].includes('PEGASUS_READER=0') && sections[3].includes('LLM reader optional'));
+// Slides 1-4: the AI-security angle. Every threat row states its real status.
+assert(sections[0].includes('Not ML engineers. Cybersecurity engineers.') && sections[0].includes('data:image/gif'));
+assert(sections[1].includes('An AI agent is an untrusted system'));
+for (const status of ['Covered by design','Covered and tested','Not applicable','Not done']) assert(sections[2].includes(status));
+assert(sections[2].includes('reader.py') && sections[2].includes('guard.py') && sections[2].includes('Neither is an attack result'));
+assert(sections[3].includes('Why AI security matters for a buyer'));
 assert(sections[4].includes(`${evidence.rehearsal.completed} / ${evidence.rehearsal.cases}`));
 assert(sections[4].includes(`${evidence.rehearsal.median_decide_ms} ms`));
 assert(sections[4].includes(`${evidence.rehearsal.max_decide_ms} ms`));
@@ -43,8 +36,6 @@ assert(sections[5].includes(`≤ ${evidence.rejected_model.required_error_pct}%`
 assert(sections[5].includes(`${evidence.rejected_model.observed_error_pct}%`));
 assert(html.includes(evidence.vault_commit));
 assert(html.includes(evidence.agent_commit));
-assert(sections[1].includes('Historical'));
-assert(sections[2].includes('not an isolated causal test'));
 assert(sections[4].includes('not a benchmark of hidden-supplier'));
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
 assert.equal(ids.length, new Set(ids).size, 'IDs must be unique');
@@ -62,7 +53,7 @@ const slides = sections.map(section => ({hidden:false,
   blocks: Array.from({length:(section.match(/class="reveal /g) || []).length}, block),
   querySelectorAll(selector) {assert.equal(selector, '.reveal');return this.blocks;}
 }));
-assert.deepEqual(slides.map(s => s.blocks.length), [0,3,3,6,3,4]); // slide 1 shows its diagram at once
+assert.deepEqual(slides.map(s => s.blocks.length), [0,0,0,0,3,4]); // slides 1-4 show everything at once
 const document = {events:{}, querySelectorAll(selector) {assert.equal(selector,'.slide');return slides;},
   getElementById(id) {assert(elements.has(id), `Missing element ${id}`);return elements.get(id);},
   addEventListener(type, fn) {this.events[type] = fn;}};
