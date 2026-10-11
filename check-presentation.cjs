@@ -30,6 +30,8 @@ const slideSections = html.split('<section class="slide"').slice(1);
 const slideCount = slideSections.length;
 const lastSlide = slideCount - 1;
 const benchmarkSlide = slideSections.findIndex(section => section.includes('id="benchmark-stage"'));
+const concessionSlide = slideSections.findIndex(section => section.includes('concession-reveal'));
+assert(concessionSlide > 0, 'Concession slide not found');
 assert(benchmarkSlide > 2, 'Benchmark slide not found after slide 3');
 const slides = Array.from({length: slideCount}, (_, index) => ({hidden: index !== 0}));
 const securityBlocks = Array.from({length: 4}, (_, index) => ({
@@ -45,7 +47,7 @@ const concessionBlocks = Array.from({length: 3}, (_, index) => ({
   classList: {toggle(name, enabled) {this.owner.classes[enabled ? 'add' : 'delete'](name);}},
   setAttribute(name, value) {this.attrs[name] = value;},
 }));
-concessionBlocks.forEach(block => {block.classList.owner = block;});
+concessionBlocks.forEach(block => {block.classList.owner = block; block.closest = () => slides[concessionSlide];});
 const document = {events: {}, getElementById: id => {
     assert(elements.has(id), 'Missing test element ' + id); return elements.get(id);
   }, addEventListener(type, fn) {this.events[type] = fn;}, querySelectorAll(selector) {
@@ -70,20 +72,19 @@ function assertActive(index) {
   assert.equal(slides[index].hidden, false);
 }
 assertActive(0);
-elements.get('next-slide').events.click(); assertActive(1);
-elements.get('next-slide').events.click(); assertActive(2);
-assert.equal(elements.get('slide-counter').textContent, `3 / ${slideCount} · 1 / 3`);
+for (let index = 1; index <= concessionSlide; index++) {elements.get('next-slide').events.click(); assertActive(index);}
+assert.equal(elements.get('slide-counter').textContent, `${concessionSlide + 1} / ${slideCount} · 1 / 3`);
 assert.equal(concessionBlocks[0].attrs['aria-hidden'], 'false');
 assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'true');
 for (let step = 1; step < 3; step++) {
-  elements.get('next-slide').events.click(); assertActive(2);
+  elements.get('next-slide').events.click(); assertActive(concessionSlide);
   assert.equal(concessionBlocks[step].attrs['aria-hidden'], 'false');
-  assert.equal(elements.get('slide-counter').textContent, `3 / ${slideCount} · ${step + 1} / 3`);
+  assert.equal(elements.get('slide-counter').textContent, `${concessionSlide + 1} / ${slideCount} · ${step + 1} / 3`);
 }
-elements.get('previous-slide').events.click(); assertActive(2);
+elements.get('previous-slide').events.click(); assertActive(concessionSlide);
 assert.equal(concessionBlocks[2].attrs['aria-hidden'], 'true');
-elements.get('next-slide').events.click(); assertActive(2);
-for (let index = 3; index < slideCount; index++) {elements.get('next-slide').events.click(); assertActive(index);}
+elements.get('next-slide').events.click(); assertActive(concessionSlide);
+for (let index = concessionSlide + 1; index < slideCount; index++) {elements.get('next-slide').events.click(); assertActive(index);}
 assert.equal(concessionBlocks[0].attrs['aria-hidden'], 'true');
 assert.equal(elements.get('slide-counter').textContent, `${slideCount} / ${slideCount} · 1 / 4`);
 assert.equal(securityBlocks[0].attrs['aria-hidden'], 'false');
@@ -107,13 +108,14 @@ key('ArrowRight'); assert.equal(securityBlocks[1].attrs['aria-hidden'], 'false')
 key('ArrowLeft'); assert.equal(securityBlocks[1].attrs['aria-hidden'], 'true');
 key('End'); assert.equal(securityBlocks[3].attrs['aria-hidden'], 'false');
 key('Home'); assertActive(0);
-key('ArrowRight'); key('ArrowRight'); assertActive(2);
+for (let index = 1; index <= concessionSlide; index++) key('ArrowRight');
+assertActive(concessionSlide);
 assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'true');
-key('ArrowRight'); assertActive(2);
+key('ArrowRight'); assertActive(concessionSlide);
 assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'false');
 key('ArrowLeft'); assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'true');
 key('Home'); assertActive(0);
-// Two moves reach slide 3, two more reveal its steps, then one move per slide.
+// One move per slide to the concession slide, two more reveal its steps, then one per slide.
 for (let move = 0; move < benchmarkSlide + 2; move++) elements.get('next-slide').events.click();
 assertActive(benchmarkSlide);
 assert.equal(elements.get('negotiation-panel').hidden, true);
