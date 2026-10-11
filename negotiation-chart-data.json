@@ -1,0 +1,605 @@
+{
+  "vault_commit": "1df984e51fb7044edd4f0cddbe24eada6329e285",
+  "agent_commit": "4fabd5764257fc15890bd2ef19040c96ed795a86",
+  "vault_snapshot": "10 Oct 2026, 23:50",
+  "reference_snapshot": "11 Oct 2026, 00:11",
+  "archived_runs": 75,
+  "cases": [
+    {
+      "id": "P01",
+      "goal": "stabilise",
+      "opening": 1153779.74,
+      "target": 1096815.78,
+      "score": 0.998,
+      "deal": 1096916.9,
+      "session": "3a0b48ea4e9dae20",
+      "runs": [
+        {
+          "score": 0.9140560101509803,
+          "deal": true,
+          "session": "0816b332cb710cbf"
+        },
+        {
+          "score": 0.5828313200135649,
+          "deal": true,
+          "session": "360a06b60a033bda"
+        },
+        {
+          "score": 0.9982248425144622,
+          "deal": true,
+          "session": "3a0b48ea4e9dae20"
+        },
+        {
+          "score": 0.3960734120310444,
+          "deal": true,
+          "session": "542fa1f8d903e14c"
+        },
+        {
+          "score": 0.9946661011629092,
+          "deal": true,
+          "session": "7f32322868c66e04"
+        },
+        {
+          "score": 0.5828313200135649,
+          "deal": true,
+          "session": "a5f7478910f2598a"
+        },
+        {
+          "score": 0.0,
+          "deal": true,
+          "session": "b0ba0d2c8dfd6afc"
+        },
+        {
+          "score": 0.9874399532616768,
+          "deal": true,
+          "session": "d413fffec4419cbf"
+        },
+        {
+          "score": 0.9727448723719339,
+          "deal": true,
+          "session": "ead1b86c3af5e98c"
+        }
+      ],
+      "reference": 0.966,
+      "median": 0.9140560101509803,
+      "archive_best": 0.9982248425144622,
+      "deal_count": 9,
+      "savings": 56862.84
+    },
+    {
+      "id": "P02",
+      "goal": "stabilise",
+      "opening": 2282867.49,
+      "target": 2235514.05,
+      "score": 0.684,
+      "deal": 2250492.9,
+      "session": "1772c59e0947ba39",
+      "runs": [
+        {
+          "score": 0.683679791795486,
+          "deal": true,
+          "session": "1772c59e0947ba39"
+        },
+        {
+          "score": 0.5022367963130012,
+          "deal": true,
+          "session": "20fdbb9beda2862b"
+        },
+        {
+          "score": 0.22847590375693969,
+          "deal": true,
+          "session": "30ec723557d102fc"
+        },
+        {
+          "score": 0.26394323200173003,
+          "deal": true,
+          "session": "32b3b929898650f8"
+        },
+        {
+          "score": 0.0,
+          "deal": false,
+          "session": "35b8575f76006e73"
+        },
+        {
+          "score": 0.6067740801935417,
+          "deal": true,
+          "session": "38a797dd18e0b777"
+        },
+        {
+          "score": 0.5022367963130012,
+          "deal": true,
+          "session": "4b0ac8e9bd9fa05e"
+        },
+        {
+          "score": 0.0,
+          "deal": true,
+          "session": "d9b2cd2c6ad05c51"
+        },
+        {
+          "score": 0.4795784635709721,
+          "deal": true,
+          "session": "ecfbc29515ea7ea6"
+        },
+        {
+          "score": 0.0,
+          "deal": false,
+          "session": "f712b5035de4e93e"
+        }
+      ],
+      "reference": 0.74,
+      "median": 0.3717608477863511,
+      "archive_best": 0.683679791795486,
+      "deal_count": 8,
+      "savings": 32374.59
+    },
+    {
+      "id": "P03",
+      "goal": "stabilise",
+      "opening": 4246314.02,
+      "target": 3909043.1,
+      "score": 0.935,
+      "deal": 3930928.91,
+      "session": "678096c8ca6eef35",
+      "runs": [
+        {
+          "score": 0.9228331929713948,
+          "deal": true,
+          "session": "0635e17c347c7953"
+        },
+        {
+          "score": 0.9351091105038049,
+          "deal": true,
+          "session": "06b550a94d083fb6"
+        },
+        {
+          "score": 0.7733031949508132,
+          "deal": true,
+          "session": "31d4c7903569a85a"
+        },
+        {
+          "score": 0.9351091105038049,
+          "deal": true,
+          "session": "678096c8ca6eef35"
+        },
+        {
+          "score": 0.9228331929713948,
+          "deal": true,
+          "session": "7b897bf3b6637764"
+        },
+        {
+          "score": 0.8547711732751817,
+          "deal": true,
+          "session": "8bf14494db5d4922"
+        },
+        {
+          "score": 0.9228331929713948,
+          "deal": true,
+          "session": "a3ce119c140b3ae2"
+        },
+        {
+          "score": 0.9228331929713948,
+          "deal": true,
+          "session": "e89abfb78364f385"
+        }
+      ],
+      "reference": 0.925,
+      "median": 0.9228331929713948,
+      "archive_best": 0.9351091105038049,
+      "deal_count": 8,
+      "savings": 315385.11
+    },
+    {
+      "id": "P04",
+      "goal": "routine",
+      "opening": 198846.33,
+      "target": 196529.32,
+      "score": 0.86,
+      "deal": 196852.67,
+      "session": "724af79791c689b9",
+      "runs": [
+        {
+          "score": 0.8604451426623068,
+          "deal": true,
+          "session": "06325810acc9c164"
+        },
+        {
+          "score": 0.8604451426623068,
+          "deal": true,
+          "session": "36f322d6faf8f103"
+        },
+        {
+          "score": 0.8604451426623068,
+          "deal": true,
+          "session": "6223af49a402530a"
+        },
+        {
+          "score": 0.8604451426623068,
+          "deal": true,
+          "session": "724af79791c689b9"
+        },
+        {
+          "score": 0.0,
+          "deal": true,
+          "session": "c8387f214ee53bc5"
+        }
+      ],
+      "reference": 0.86,
+      "median": 0.8604451426623068,
+      "archive_best": 0.8604451426623068,
+      "deal_count": 5,
+      "savings": 1993.66
+    },
+    {
+      "id": "P05",
+      "goal": "leverage",
+      "opening": 305544.96,
+      "target": 223424.17,
+      "score": 0.734,
+      "deal": 245267.34,
+      "session": "38d4dd00bcbd27b0",
+      "runs": [
+        {
+          "score": 0.734011691801796,
+          "deal": true,
+          "session": "0a5d8d0443825f51"
+        },
+        {
+          "score": 0.0,
+          "deal": false,
+          "session": "0c33c2e26f104a11"
+        },
+        {
+          "score": 0.734011691801796,
+          "deal": true,
+          "session": "38d4dd00bcbd27b0"
+        },
+        {
+          "score": 0.734011691801796,
+          "deal": true,
+          "session": "51ffeb39e0bbf1ed"
+        },
+        {
+          "score": 0.5796843893002005,
+          "deal": true,
+          "session": "7b5e044e331e1531"
+        },
+        {
+          "score": 0.734011691801796,
+          "deal": true,
+          "session": "b4400695eb5fca2f"
+        },
+        {
+          "score": 0.734011691801796,
+          "deal": true,
+          "session": "c258812a16bb8fdd"
+        }
+      ],
+      "reference": 0.555,
+      "median": 0.734011691801796,
+      "archive_best": 0.734011691801796,
+      "deal_count": 6,
+      "savings": 60277.62
+    },
+    {
+      "id": "P07",
+      "goal": "routine",
+      "opening": 391027.4,
+      "target": 299241.49,
+      "score": 0.715,
+      "deal": 325444.8,
+      "session": "76f3602dcb49d02b",
+      "runs": [
+        {
+          "score": 0.675556847450769,
+          "deal": true,
+          "session": "0b18b19250fe83d1"
+        },
+        {
+          "score": 0.586131357198507,
+          "deal": true,
+          "session": "1915245dd410385e"
+        },
+        {
+          "score": 0.675556847450769,
+          "deal": true,
+          "session": "1cc386c0c8e0bb59"
+        },
+        {
+          "score": 0.675556847450769,
+          "deal": true,
+          "session": "4232b28976b6505c"
+        },
+        {
+          "score": 0.675556847450769,
+          "deal": true,
+          "session": "46a4c230f1e8f5ea"
+        },
+        {
+          "score": 0.675556847450769,
+          "deal": true,
+          "session": "ea23095c4e891808"
+        },
+        {
+          "score": 0.675556847450769,
+          "deal": true,
+          "session": "ec5eb340f0cd93aa"
+        },
+        {
+          "score": 0.675556847450769,
+          "deal": true,
+          "session": "eed897c9e22c0fe9"
+        }
+      ],
+      "reference": 0.782,
+      "median": 0.675556847450769,
+      "archive_best": 0.675556847450769,
+      "deal_count": 8,
+      "savings": 65582.6
+    },
+    {
+      "id": "P08",
+      "goal": "leverage",
+      "opening": 1135887.28,
+      "target": 960309.33,
+      "score": 0.659,
+      "deal": 1020119.1,
+      "session": "2fc3680889612cdf",
+      "runs": [
+        {
+          "score": 0.6593548905201365,
+          "deal": true,
+          "session": "2fc3680889612cdf"
+        },
+        {
+          "score": 0.6593548905201365,
+          "deal": true,
+          "session": "362401440f81a3ea"
+        },
+        {
+          "score": 0.6593548905201365,
+          "deal": true,
+          "session": "c894004b6b806a73"
+        },
+        {
+          "score": 0.4113483498355,
+          "deal": true,
+          "session": "ea584a91cc4a0fb7"
+        },
+        {
+          "score": 0.1508207608073795,
+          "deal": true,
+          "session": "f55ad06be81419b1"
+        }
+      ],
+      "reference": 0.752,
+      "median": 0.6593548905201365,
+      "archive_best": 0.6593548905201365,
+      "deal_count": 5,
+      "savings": 115768.18
+    },
+    {
+      "id": "P10",
+      "goal": "secure_supply",
+      "opening": 1932492.18,
+      "target": 1328926.89,
+      "score": 0.679,
+      "deal": 1522963.2,
+      "session": "6f1c6ff7186e18b4",
+      "runs": [
+        {
+          "score": 0.5546564481864089,
+          "deal": true,
+          "session": "004ec892b1fe39d4"
+        },
+        {
+          "score": 0.6707108356081908,
+          "deal": true,
+          "session": "3724f4768890aa22"
+        },
+        {
+          "score": 0.6785164534560958,
+          "deal": true,
+          "session": "3a9a90aebe3bb7a2"
+        },
+        {
+          "score": 0.5624620660343139,
+          "deal": true,
+          "session": "3dafa37bbf1df990"
+        },
+        {
+          "score": 0.0,
+          "deal": false,
+          "session": "57afc7b5ec72652d"
+        },
+        {
+          "score": 0.6785164534560958,
+          "deal": true,
+          "session": "6f1c6ff7186e18b4"
+        },
+        {
+          "score": 0.5546564481864089,
+          "deal": true,
+          "session": "79f105dc4619c1c2"
+        },
+        {
+          "score": 0.6472939820644754,
+          "deal": true,
+          "session": "ae99ef2ade741473"
+        },
+        {
+          "score": 0.5780733017301243,
+          "deal": true,
+          "session": "cc878c200dad6126"
+        }
+      ],
+      "reference": 0.686,
+      "median": 0.5780733017301243,
+      "archive_best": 0.6785164534560958,
+      "deal_count": 8,
+      "savings": 409528.98
+    },
+    {
+      "id": "P11",
+      "goal": "quality_first",
+      "opening": 817578.0,
+      "target": 722500.02,
+      "score": 0.794,
+      "deal": 742132.5,
+      "session": "3ee54cc7c382ca6a",
+      "runs": [
+        {
+          "score": 0.5092188538292464,
+          "deal": true,
+          "session": "38c0b26db9fb2f5b"
+        },
+        {
+          "score": 0.7935118099900735,
+          "deal": true,
+          "session": "3ee54cc7c382ca6a"
+        },
+        {
+          "score": 0.7098962346486538,
+          "deal": true,
+          "session": "5c64e344b7a30396"
+        },
+        {
+          "score": 0.4741003121858501,
+          "deal": true,
+          "session": "77d14f9ce5201bc6"
+        },
+        {
+          "score": 0.6262806593072341,
+          "deal": true,
+          "session": "aae8fe0d36dcb57b"
+        },
+        {
+          "score": 0.3143945632837383,
+          "deal": true,
+          "session": "c168282558ca273e"
+        }
+      ],
+      "reference": 0.314,
+      "median": 0.5677497565682402,
+      "archive_best": 0.7935118099900735,
+      "deal_count": 6,
+      "savings": 75445.5
+    },
+    {
+      "id": "P18",
+      "goal": "leverage",
+      "opening": 295173.23,
+      "target": 222651.27,
+      "score": 0.63,
+      "deal": 249519.92,
+      "session": "3c71d9fdf6cecb7f",
+      "runs": [
+        {
+          "score": 0.2651526516933624,
+          "deal": true,
+          "session": "0fd3bcbc795c0d88"
+        },
+        {
+          "score": 0.4728651845592699,
+          "deal": true,
+          "session": "27b89ff53abe27fe"
+        },
+        {
+          "score": 0.5200438598184602,
+          "deal": true,
+          "session": "6b2258a55aabf0e0"
+        },
+        {
+          "score": 0.4728651845592699,
+          "deal": true,
+          "session": "9ce11ac5f56f8ae3"
+        },
+        {
+          "score": 0.4728651845592699,
+          "deal": true,
+          "session": "a1c40c521374bbe7"
+        },
+        {
+          "score": 0.5200438598184602,
+          "deal": true,
+          "session": "a46afed51e42a952"
+        },
+        {
+          "score": 0.5748913846233606,
+          "deal": true,
+          "session": "b6224b1c69314cd5"
+        },
+        {
+          "score": 0.5748913846233606,
+          "deal": true,
+          "session": "f8069a1908985989"
+        }
+      ],
+      "reference": 0.386,
+      "median": 0.4964545221888651,
+      "archive_best": 0.5748913846233606,
+      "deal_count": 8,
+      "savings": 45653.31
+    }
+  ],
+  "source": "https://github.com/IchamRaison/ehl-finale-vault/blob/1df984e51fb7044edd4f0cddbe24eada6329e285/03%20Build/Co%C3%BBts%20de%20r%C3%A9f%C3%A9rence%20par%20cas.md",
+  "replay": {
+    "session": "3a0b48ea4e9dae20",
+    "score": 0.9982248425144622,
+    "opening": 1153779.74,
+    "deal": 1096916.9,
+    "target": 1096815.78,
+    "savings": 56862.84,
+    "points": [
+      {
+        "round": 0,
+        "price": 138.55,
+        "payment_days": 30,
+        "effective_date": "2026-11-01",
+        "verified": 0
+      },
+      {
+        "round": 1,
+        "price": 137.9,
+        "payment_days": 45,
+        "effective_date": "2027-04-01",
+        "verified": 3
+      },
+      {
+        "round": 2,
+        "price": 132.4,
+        "payment_days": 14,
+        "effective_date": "2027-04-01",
+        "verified": 2
+      },
+      {
+        "round": 3,
+        "price": 131.7,
+        "payment_days": 14,
+        "effective_date": "2027-04-01",
+        "verified": 0
+      },
+      {
+        "round": 4,
+        "price": 131.2,
+        "payment_days": 14,
+        "effective_date": "2027-04-01",
+        "verified": 0
+      }
+    ],
+    "breakdown": {
+      "price": 1053534.42,
+      "uncovered_need": 0.0,
+      "fallback_risk": 0.0,
+      "payment_terms": 10769.46,
+      "freight": 15485.0,
+      "late_delivery": 0.0,
+      "quality": 1584.36,
+      "tooling": 0.0,
+      "index_clause": 0.0,
+      "index_risk": 0.0,
+      "relationship": 15543.65
+    },
+    "url": "https://arena.tacto.ai/replay/3a0b48ea4e9dae20",
+    "commit": "b09063f"
+  }
+}

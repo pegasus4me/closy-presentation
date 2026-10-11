@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-10",
+  "case": "P01",
+  "description": "Offline model responses to five decision points; not complete agent negotiations. No new API calls or arena sessions were performed.",
+  "vault_commit": "311a56399b4eacfe01052b72ce51bdf4c03c6e97",
+  "agent_commit": "f66dcde749a332aabd3ac591d9f59f676f18ff00",
+  "graded_artifact_sha256": "39bc022d466f565e078ca9f65b16bfbbcab313ede555bf7cb1d6fe8be3e8a843",
+  "source_report": "https://github.com/IchamRaison/ehl-finale-vault/blob/311a56399b4eacfe01052b72ce51bdf4c03c6e97/03%20Build/Benchmark%20LLM%20-%20Qualit%C3%A9%20et%20secondes.md",
+  "configurations": [
+    {
+      "configuration": "gpt61-sol-medium-smoke",
+      "model": "GPT-6.1 Sol",
+      "reasoning": "Medium reasoning",
+      "decision_points": 5,
+      "repetitions": 1,
+      "median_seconds": 10.17,
+      "worst_seconds": 11.72,
+      "fully_compliant": 5,
+      "mean_compliance_score": 100,
+      "observation": "No evidence IDs cited."
+    },
+    {
+      "configuration": "gpt6-luna-medium-smoke",
+      "model": "GPT-6 Luna",
+      "reasoning": "Medium reasoning",
+      "decision_points": 5,
+      "repetitions": 1,
+      "median_seconds": 22.8,
+      "worst_seconds": 23.56,
+      "fully_compliant": 5,
+      "mean_compliance_score": 100,
+      "observation": "Internal cost disclosed in one email; outside the compliance rubric."
+    },
+    {
+      "configuration": "deepseek-flash-no-thinking-4k",
+      "model": "DeepSeek V4.1 Flash",
+      "reasoning": "Reasoning disabled",
+      "decision_points": 5,
+      "repetitions": 1,
+      "median_seconds": 2.51,
+      "worst_seconds": 3.67,
+      "fully_compliant": 2,
+      "mean_compliance_score": 88,
+      "observation": "Two overlong emails; one change to a fixed contract term."
+    }
+  ]
+}
