@@ -2,168 +2,97 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const assert = require('assert');
-const html = fs.readFileSync(path.join(__dirname, 'presentation.html'), 'utf8');
-const data = JSON.parse(html.match(/<script type="application\/json" id="negotiation-chart-data">([\s\S]*?)<\/script>/)[1]);
-const elements = new Map();
-function element(id, value = '') {
-  const item = {id, value, textContent: '', innerHTML: '', hidden: false, dataset: {}, attrs: {},
-    events: {}, addEventListener(type, fn) {this.events[type] = fn;},
-    setAttribute(name, value) {this.attrs[name] = value;}};
-  elements.set(id, item);
-  return item;
+const root = __dirname;
+const html = fs.readFileSync(path.join(root, 'presentation.html'), 'utf8');
+const evidence = JSON.parse(fs.readFileSync(path.join(root, 'pitch-evidence.json'), 'utf8'));
+const sections = [...html.matchAll(/<section class="slide"[\s\S]*?<\/section>/g)].map(match => match[0]);
+assert.equal(sections.length, 6);
+assert.deepEqual(sections.map(s => Number(s.match(/data-seconds="(\d+)"/)[1])), evidence.timings_seconds);
+assert.equal(evidence.timings_seconds.reduce((sum, n) => sum + n, 0), 300);
+assert.equal((html.match(/class="logo"/g) || []).length, 6);
+assert(html.includes('background-size: cover'));
+assert(html.includes('prefers-reduced-motion:reduce'));
+assert(html.includes('@media print'));
+assert(!html.includes('<script src='));
+assert(!html.includes('The lowest price'));
+assert(!html.includes('id="benchmark-plot"'));
+assert(sections[1].includes(`${evidence.p01.notice_days}<span>days`));
+assert(sections[1].includes(`${evidence.p01.contract_notice_days}<span>days`));
+assert(sections[1].includes(`${evidence.p01.verified_claims} / ${evidence.p01.cited_claims}`));
+assert(sections[2].includes('€137.90') && sections[2].includes('€132.40'));
+assert(sections[2].includes('45 days') && sections[2].includes('14 days'));
+assert(sections[2].includes('15–75 combinations') && sections[2].includes('19 practice cases'));
+assert(sections[3].includes('PEGASUS_READER=0') && sections[3].includes('LLM reader optional'));
+assert(sections[4].includes(`${evidence.rehearsal.completed} / ${evidence.rehearsal.cases}`));
+assert(sections[4].includes(`${evidence.rehearsal.median_decide_ms} ms`));
+assert(sections[4].includes(`${evidence.rehearsal.max_decide_ms} ms`));
+assert(sections[5].includes(`${evidence.rejected_model.archived_sessions}<span>`));
+assert(sections[5].includes(`≤ ${evidence.rejected_model.required_error_pct}%`));
+assert(sections[5].includes(`${evidence.rejected_model.observed_error_pct}%`));
+assert(html.includes(evidence.vault_commit));
+assert(html.includes(evidence.agent_commit));
+assert(sections[1].includes('Historical'));
+assert(sections[2].includes('not an isolated causal test'));
+assert(sections[4].includes('not a benchmark of hidden-supplier'));
+const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+assert.equal(ids.length, new Set(ids).size, 'IDs must be unique');
+assert(fs.existsSync(path.join(root, 'appendix.html')));
+
+const elements = new Map(['previous-slide','next-slide','slide-counter','appendix-link'].map(id => [id, {
+  id, hidden:false, disabled:false, textContent:'', events:{}, addEventListener(type, fn) {this.events[type] = fn;}
+}]));
+function block() {
+  const b = {attrs:{}, classes:new Set(), inert:false, setAttribute(name,value) {this.attrs[name] = value;}};
+  b.classList = {toggle(name, enabled) {b.classes[enabled ? 'add' : 'delete'](name);}};
+  return b;
 }
-for (const id of ['previous-slide', 'next-slide', 'slide-counter', 'replay-plot', 'replay-round-label',
-  'replay-detail', 'replay-summary', 'replay-source', 'benchmark-plot', 'benchmark-legend',
-  'benchmark-method', 'benchmark-detail', 'benchmark-source', 'negotiation-panel',
-  'benchmark-stage', 'benchmark-step-title', 'benchmark-step-description', 'benchmark-step-count',
-  'benchmark-back', 'benchmark-forward', 'benchmark-score-explanation', 'benchmark-caution']) element(id);
-element('negotiation-chart-data').textContent = JSON.stringify(data);
-element('replay-round', '0');
-element('benchmark-goal', 'all');
-element('benchmark-case', 'P01');
-const views = ['0', '1', '2'].map(view => {
-  const item = element('view-' + view); item.dataset.benchmarkView = view; return item;
-});
-const slides = Array.from({length: 6}, (_, index) => ({hidden: index !== 0}));
-const securityBlocks = Array.from({length: 4}, (_, index) => ({
-  attrs: {},
-  classes: new Set(index ? ['is-pending'] : []),
-  classList: {toggle(name, enabled) {this.owner.classes[enabled ? 'add' : 'delete'](name);}},
-  setAttribute(name, value) {this.attrs[name] = value;},
+const slides = sections.map(section => ({hidden:false,
+  blocks: Array.from({length:(section.match(/class="reveal /g) || []).length}, block),
+  querySelectorAll(selector) {assert.equal(selector, '.reveal');return this.blocks;}
 }));
-securityBlocks.forEach(block => {block.classList.owner = block;});
-const concessionBlocks = Array.from({length: 3}, (_, index) => ({
-  attrs: {},
-  classes: new Set(index ? ['is-pending'] : []),
-  classList: {toggle(name, enabled) {this.owner.classes[enabled ? 'add' : 'delete'](name);}},
-  setAttribute(name, value) {this.attrs[name] = value;},
-}));
-concessionBlocks.forEach(block => {block.classList.owner = block;});
-const document = {events: {}, getElementById: id => {
-    assert(elements.has(id), 'Missing test element ' + id); return elements.get(id);
-  }, addEventListener(type, fn) {this.events[type] = fn;}, querySelectorAll(selector) {
-    if (selector === '.slide') return slides;
-    if (selector === '.security-reveal') return securityBlocks;
-    if (selector === '.concession-reveal') return concessionBlocks;
-    if (selector === '[data-benchmark-view]') return views;
-    if (selector.startsWith('#replay-plot')) return [...elements.get('replay-plot').innerHTML.matchAll(/data-round="(\d+)"/g)].map(match => {
-      const item = element('point-' + match[1]); item.dataset.round = match[1]; return item;
-    });
-    if (selector.startsWith('#benchmark-plot')) return [...elements.get('benchmark-plot').innerHTML.matchAll(/data-case="(P\d+)"/g)].map(match => {
-      const item = element('row-' + match[1]); item.dataset.case = match[1]; return item;
-    });
-    throw Error('Unexpected selector ' + selector);
-  }};
-let reduceMotion = false, animationCount = 0;
-elements.get('benchmark-stage').animate = () => {animationCount++;};
-const context = vm.createContext({document, Intl, window: {matchMedia: () => ({matches: reduceMotion})}});
-for (const script of html.matchAll(/<script(?: id="interactive-charts")?>([\s\S]*?)<\/script>/g)) vm.runInContext(script[1], context);
-function assertActive(index) {
-  assert.equal(slides.filter(slide => !slide.hidden).length, 1);
-  assert.equal(slides[index].hidden, false);
+assert.deepEqual(slides.map(s => s.blocks.length), [3,3,3,6,3,4]);
+const document = {events:{}, querySelectorAll(selector) {assert.equal(selector,'.slide');return slides;},
+  getElementById(id) {assert(elements.has(id), `Missing element ${id}`);return elements.get(id);},
+  addEventListener(type, fn) {this.events[type] = fn;}};
+const context = vm.createContext({document});
+vm.runInContext(html.match(/<script>([\s\S]*?)<\/script>/)[1], context);
+const next = () => elements.get('next-slide').events.click();
+const previous = () => elements.get('previous-slide').events.click();
+function check(index, step) {
+  assert.equal(slides.filter(s => !s.hidden).length,1);
+  assert.equal(slides[index].hidden,false);
+  slides.forEach((slide, i) => slide.blocks.forEach((b,j) => {
+    const pending = i !== index || j > step;
+    assert.equal(b.attrs['aria-hidden'], String(pending));
+    assert.equal(b.inert,pending);
+    assert.equal(b.classes.has('is-pending'),pending);
+  }));
+  assert.equal(elements.get('slide-counter').textContent,`${index+1} / 6 · ${step+1} / ${slides[index].blocks.length}`);
 }
-assertActive(0);
-elements.get('next-slide').events.click(); assertActive(1);
-elements.get('next-slide').events.click(); assertActive(2);
-assert.equal(elements.get('slide-counter').textContent, '3 / 6 · 1 / 3');
-assert.equal(concessionBlocks[0].attrs['aria-hidden'], 'false');
-assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'true');
-for (let step = 1; step < 3; step++) {
-  elements.get('next-slide').events.click(); assertActive(2);
-  assert.equal(concessionBlocks[step].attrs['aria-hidden'], 'false');
-  assert.equal(elements.get('slide-counter').textContent, `3 / 6 · ${step + 1} / 3`);
-}
-elements.get('previous-slide').events.click(); assertActive(2);
-assert.equal(concessionBlocks[2].attrs['aria-hidden'], 'true');
-elements.get('next-slide').events.click(); assertActive(2);
-for (let index = 3; index < 6; index++) {elements.get('next-slide').events.click(); assertActive(index);}
-assert.equal(concessionBlocks[0].attrs['aria-hidden'], 'true');
-assert.equal(elements.get('slide-counter').textContent, '6 / 6 · 1 / 4');
-assert.equal(securityBlocks[0].attrs['aria-hidden'], 'false');
-assert.equal(securityBlocks[1].attrs['aria-hidden'], 'true');
-assert.equal(elements.get('next-slide').disabled, false);
-for (let step = 1; step < 4; step++) {
-  elements.get('next-slide').events.click();
-  assertActive(5);
-  assert.equal(securityBlocks[step].attrs['aria-hidden'], 'false');
-  assert.equal(elements.get('slide-counter').textContent, `6 / 6 · ${step + 1} / 4`);
+check(0,0);
+assert(elements.get('previous-slide').disabled);
+for (let index=0;index<slides.length;index++) {
+  if (index) {next();check(index,0);}
+  for (let step=1;step<slides[index].blocks.length;step++) {next();check(index,step);}
 }
 assert(elements.get('next-slide').disabled);
-elements.get('previous-slide').events.click(); assertActive(5);
-assert.equal(securityBlocks[3].attrs['aria-hidden'], 'true');
-for (let step = 0; step < 3; step++) elements.get('previous-slide').events.click();
-assertActive(4);
-const key = name => document.events.keydown({key: name, target: {closest: () => null}, preventDefault() {}});
-key('ArrowRight'); assertActive(5);
-assert.equal(securityBlocks[1].attrs['aria-hidden'], 'true');
-key('ArrowRight'); assert.equal(securityBlocks[1].attrs['aria-hidden'], 'false');
-key('ArrowLeft'); assert.equal(securityBlocks[1].attrs['aria-hidden'], 'true');
-key('End'); assert.equal(securityBlocks[3].attrs['aria-hidden'], 'false');
-key('Home'); assertActive(0);
-key('ArrowRight'); key('ArrowRight'); assertActive(2);
-assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'true');
-key('ArrowRight'); assertActive(2);
-assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'false');
-key('ArrowLeft'); assert.equal(concessionBlocks[1].attrs['aria-hidden'], 'true');
-key('Home'); assertActive(0);
-for (let move = 0; move < 6; move++) elements.get('next-slide').events.click();
-assertActive(4);
-assert.equal(elements.get('negotiation-panel').hidden, true);
-assert.equal(elements.get('benchmark-score-explanation').hidden, false);
-const savingsView = elements.get('benchmark-score-explanation').innerHTML;
-assert(savingsView.includes('12,759,510.63'));
-assert(savingsView.includes('11,580,638.24'));
-assert(savingsView.includes('1,178,872.39'));
-assert(savingsView.includes('9.2%'));
-assert(savingsView.includes('10 cases'));
-for (const row of data.cases) assert(savingsView.includes(row.id));
-assert(!savingsView.includes('99.8'));
-assert(elements.get('benchmark-method').textContent.includes('no repeated runs counted'));
-assert(elements.get('benchmark-caution').textContent.includes('not from a single run'));
-elements.get('benchmark-forward').events.click();
-assert.equal(elements.get('negotiation-panel').hidden, false);
-assert.equal(elements.get('benchmark-score-explanation').hidden, true);
-assert(elements.get('benchmark-step-count').textContent.includes('2 of 3'));
-assert.equal((elements.get('benchmark-plot').innerHTML.match(/data-case=/g) || []).length, 10);
-assert(elements.get('replay-summary').textContent.includes('56,862.84'));
-assert(elements.get('replay-summary').textContent.includes('1,096,916.90'));
-assert(elements.get('replay-round-label').textContent === 'Offer 1 of 5');
-assert(elements.get('replay-detail').innerHTML.includes('contract and the supplier'));
-assert(!elements.get('replay-summary').textContent.includes('Score'));
-elements.get('replay-round').value = '0'; elements.get('replay-round').events.input();
-assert(elements.get('replay-detail').innerHTML.includes('138.55'));
-assert(elements.get('replay-detail').innerHTML.includes('30 days'));
-elements.get('point-2').events.click();
-assert(elements.get('replay-detail').innerHTML.includes('132.40'));
-assert(elements.get('replay-detail').innerHTML.includes('14 days'));
-assert(elements.get('replay-detail').innerHTML.includes('faster payment'));
-elements.get('replay-round').value = '4'; elements.get('replay-round').events.input();
-assert(elements.get('replay-round-label').textContent === 'Offer 5 of 5');
-assert(elements.get('replay-detail').innerHTML.includes('Closy accepts it'));
-elements.get('benchmark-forward').events.click();
-assert(elements.get('benchmark-method').textContent.includes('75 ended practice sessions'));
-assert(elements.get('benchmark-legend').textContent.includes('median'));
-elements.get('benchmark-goal').value = 'quality_first'; elements.get('benchmark-goal').events.change();
-assert.equal((elements.get('benchmark-plot').innerHTML.match(/data-case=/g) || []).length, 1);
-assert(elements.get('benchmark-detail').innerHTML.includes('P11'));
-elements.get('benchmark-back').events.click();
-assert.equal(elements.get('negotiation-panel').hidden, false);
-assert.equal(views[1].attrs['aria-pressed'], 'true');
-const before = animationCount;
-reduceMotion = true;
-views[0].events.click();
-assert.equal(animationCount, before, 'Reduced-motion preference must suppress stage animation');
-assert.equal(elements.get('negotiation-panel').hidden, true);
-assert.equal(elements.get('benchmark-back').disabled, true);
-views[2].events.click();
-elements.get('benchmark-forward').events.click();
-assert.equal(views[0].attrs['aria-pressed'], 'true');
-const benchmarkSvg = vm.runInContext('benchmarkSvg(chartData.cases, "vault", "P01")', context);
-const archiveSvg = vm.runInContext('benchmarkSvg(chartData.cases, "archive", "P01")', context);
-const replaySvg = vm.runInContext('replaySvg(chartData.replay.points, 4)', context);
-for (const svg of [benchmarkSvg, archiveSvg, replaySvg]) {
-  assert(!svg.includes('NaN')); assert(!svg.includes('undefined'));
+assert(!elements.get('appendix-link').hidden);
+next();check(5,3);
+for (let index=slides.length-1;index>=0;index--) {
+  for (let step=slides[index].blocks.length-2;step>=0;step--) {previous();check(index,step);}
+  if (index) {previous();check(index-1,slides[index-1].blocks.length-1);}
 }
-assert.equal(vm.runInContext('escapeChartText("<img onerror=bad>")', context), '&lt;img onerror=bad&gt;');
-if (process.argv[2]) fs.writeFileSync(process.argv[2], JSON.stringify([benchmarkSvg, archiveSvg, replaySvg]));
-console.log('Passed: navigation, concession reveals, replay, three benchmark steps, aggregate savings, filters, reduced motion, source data and SVG geometry.');
+assert(elements.get('previous-slide').disabled);
+assert(elements.get('appendix-link').hidden);
+const key = (name, options={}) => document.events.keydown({key:name,target:{closest:()=>null},preventDefault(){},...options});
+key('End');check(5,3);
+key('Home');check(0,0);
+key('ArrowRight');check(0,1);
+key('ArrowLeft');check(0,0);
+key(' ',{target:{closest:selector=>selector.includes('button') ? {} : null}});check(0,0);
+key('ArrowRight',{ctrlKey:true});check(0,0);
+key('ArrowRight',{target:{closest:()=>({})}});check(0,0);
+key('Enter');check(0,0);
+key('PageDown');check(0,1);
+key('PageUp');check(0,0);
+console.log('Passed: six slides, five-minute timing, evidence figures, source caveats, progressive reveals, keyboard navigation and appendix link.');
