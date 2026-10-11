@@ -24,11 +24,13 @@ element('benchmark-case', 'P01');
 const views = ['0', '1', '2'].map(view => {
   const item = element('view-' + view); item.dataset.benchmarkView = view; return item;
 });
-// Counted from the HTML so an optional slide can be removed without editing this check.
-// The benchmarks are always the second-to-last slide and the architecture the last one.
-const slideCount = (html.match(/<section class="slide"/g) || []).length;
+// Counted from the HTML so optional slides can be added or removed without editing this check.
+// The architecture is always the last slide; the benchmarks are found by their content.
+const slideSections = html.split('<section class="slide"').slice(1);
+const slideCount = slideSections.length;
 const lastSlide = slideCount - 1;
-const benchmarkSlide = slideCount - 2;
+const benchmarkSlide = slideSections.findIndex(section => section.includes('id="benchmark-stage"'));
+assert(benchmarkSlide > 2, 'Benchmark slide not found after slide 3');
 const slides = Array.from({length: slideCount}, (_, index) => ({hidden: index !== 0}));
 const securityBlocks = Array.from({length: 4}, (_, index) => ({
   attrs: {},
@@ -97,7 +99,7 @@ assert(elements.get('next-slide').disabled);
 elements.get('previous-slide').events.click(); assertActive(lastSlide);
 assert.equal(securityBlocks[3].attrs['aria-hidden'], 'true');
 for (let step = 0; step < 3; step++) elements.get('previous-slide').events.click();
-assertActive(benchmarkSlide);
+assertActive(lastSlide - 1);
 const key = name => document.events.keydown({key: name, target: {closest: () => null}, preventDefault() {}});
 key('ArrowRight'); assertActive(lastSlide);
 assert.equal(securityBlocks[1].attrs['aria-hidden'], 'true');
