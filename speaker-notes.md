@@ -6,7 +6,7 @@ English talk track. Six main slides; interactive replay and benchmark charts in 
 
 “We built Closy as an autonomous buyer. Our approach was to use the buyer’s data to defend our requests, calculate the value of concessions, and execute negotiations within the time limit.”
 
-The cover contains only the title and logo. Move straight into a concrete example; the jury knows the challenge.
+The cover shows the title, logo, arena label and three static themes along the bottom. Move straight into a concrete example; the jury knows the challenge.
 
 ## 2 · We turned the data into negotiation leverage — 0:20–1:05
 
