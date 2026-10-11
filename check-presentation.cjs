@@ -22,7 +22,7 @@ assert(!sections[0].includes('We turn buyer data'));
 assert(sections[0].includes('class="cover-footer"'));
 assert(sections[0].includes('Closy · Tacto Negotiation Arena'));
 for (const theme of ['01','Evidence','02','Trade-offs','03','Execution']) assert(sections[0].includes(theme));
-assert(!sections[0].includes('class="reveal'));
+assert.equal((sections[0].match(/class="reveal /g) || []).length,3);
 assert(!html.includes('id="benchmark-plot"'));
 assert(sections[1].includes(`${evidence.p01.notice_days}<span>days`));
 assert(sections[1].includes(`${evidence.p01.contract_notice_days}<span>days`));
@@ -58,7 +58,7 @@ const slides = sections.map(section => ({hidden:false,
   blocks: Array.from({length:(section.match(/class="reveal /g) || []).length}, block),
   querySelectorAll(selector) {assert.equal(selector, '.reveal');return this.blocks;}
 }));
-assert.deepEqual(slides.map(s => s.blocks.length), [0,3,3,6,3,4]);
+assert.deepEqual(slides.map(s => s.blocks.length), [3,3,3,6,3,4]);
 const document = {events:{}, querySelectorAll(selector) {assert.equal(selector,'.slide');return slides;},
   getElementById(id) {assert(elements.has(id), `Missing element ${id}`);return elements.get(id);},
   addEventListener(type, fn) {this.events[type] = fn;}};
@@ -95,13 +95,13 @@ assert(elements.get('appendix-link').hidden);
 const key = (name, options={}) => document.events.keydown({key:name,target:{closest:()=>null},preventDefault(){},...options});
 key('End');check(5,3);
 key('Home');check(0,0);
-key('ArrowRight');check(1,0);
+key('ArrowRight');check(0,1);
 key('ArrowLeft');check(0,0);
 key(' ',{target:{closest:selector=>selector.includes('button') ? {} : null}});check(0,0);
 key('ArrowRight',{ctrlKey:true});check(0,0);
 key('ArrowRight',{target:{closest:()=>({})}});check(0,0);
 key('Enter');check(0,0);
-key('PageDown');check(1,0);
+key('PageDown');check(0,1);
 key('PageUp');check(0,0);
 console.log('Passed: six slides, five-minute timing, evidence figures, source caveats, progressive reveals, keyboard navigation and appendix link.');
 
