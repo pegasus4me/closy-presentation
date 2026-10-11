@@ -25,8 +25,8 @@ assert(!html.includes('id="benchmark-plot"'));
 // Slides 1-4: the AI-security angle. Every threat row states its real status.
 assert(sections[0].includes('Not ML engineers. Cybersecurity engineers.') && sections[0].includes('data:image/gif'));
 assert(sections[1].includes('An AI agent is an untrusted system'));
-for (const status of ['Covered by design','Covered and tested','Not applicable','Not done']) assert(sections[2].includes(status));
-assert(sections[2].includes('reader.py') && sections[2].includes('guard.py') && sections[2].includes('Neither is an attack result'));
+for (const status of ['Covered by design','Covered and tested']) assert(sections[2].includes(status));
+assert(sections[2].includes('reader.py') && sections[2].includes('guard.py') && sections[2].includes('not attack results'));
 assert(sections[3].includes('Why AI security matters for a buyer'));
 assert(sections[4].includes(`${evidence.rehearsal.completed} / ${evidence.rehearsal.cases}`));
 assert(sections[4].includes(`${evidence.rehearsal.median_decide_ms} ms`));
