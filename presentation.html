@@ -1636,7 +1636,7 @@ function replaySvg(points, active) {
     <circle cx="${x(index)}" cy="${y(point.price)}" r="18" fill="transparent"/>
     ${index === active ? `<circle cx="${x(index)}" cy="${y(point.price)}" r="13" fill="var(--chart-accent)" fill-opacity="0.12"/>` : ''}
     <circle cx="${x(index)}" cy="${y(point.price)}" r="${index === active ? 7 : 5}" fill="${index === active ? 'var(--chart-accent)' : '#071117'}" stroke="var(--chart-accent)" stroke-width="2"/>
-    <text x="${x(index)}" y="${y(point.price) - 22}" text-anchor="middle" fill="var(--chart-text)">${point.price.toFixed(2)}</text>
+    <text x="${index === 0 ? x(index) + 6 : x(index)}" y="${y(point.price) - 22}" text-anchor="${index === 0 ? 'start' : 'middle'}" fill="var(--chart-text)">${point.price.toFixed(2)}</text>
     <text x="${x(index)}" y="253" text-anchor="middle" fill="var(--chart-muted)">${index === 0 ? 'Opening' : 'Round ' + point.round}</text>
   </g>`).join('');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 270" aria-labelledby="replay-chart-title" style="font:18px -apple-system,BlinkMacSystemFont,sans-serif">
