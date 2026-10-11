@@ -2,11 +2,11 @@
 
 English talk track. Six main slides; interactive replay and benchmark charts in `appendix.html` for questions.
 
-## 1 · Our approach and implementation — 0:00–0:20
+## 1 · Our approach: security engineers, not ML researchers — 0:00–0:20
 
-“We built Closy as an autonomous buyer. Our approach was to use the buyer’s data to defend our requests, calculate the value of concessions, and execute negotiations within the time limit.”
+“AI-agent security is the hot topic right now: agents that leak secrets or get talked into things. We’re cyber people, so we treated our own buyer as an untrusted system: it must never leak and never lie. The code computes every euro, every argument cites a verifiable fact, and a fail-closed guard checks each email before it leaves.”
 
-The cover shows the title, logo, arena label and three themes along the bottom, revealed one at a time with Next or the right arrow. Move straight into a concrete example; the jury knows the challenge.
+Point at block 05: `guard.py` removes any sentence whose ID is unknown or whose figure does not match its source, keeps our alternative, its price, a budget or urgency out of the email, and replaces an invalid term sheet with a safe question. In the recorded sessions suppliers ask for our target price and the data behind it; they do not ask for our budget outright, so say “probes for our target and our data”. The LLM is optional (reader and prose, off by default). The 202-session figures measure what suppliers took into account (X9); ranking arguments by that effect is PR #12, not in `4fabd57`. Do not mention prompt injection or attacking the agent: the project is defensive and has neither.
 
 ## 2 · We turned the data into negotiation leverage — 0:20–1:05
 
