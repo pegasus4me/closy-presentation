@@ -1,0 +1,61 @@
+{
+  "agent_commit": "4fabd5764257fc15890bd2ef19040c96ed795a86",
+  "vault_commit": "4399dd9f182ed68968538e9695cdc6ca1bea0339",
+  "planned_final_reader": "keywords; PEGASUS_READER=0; LLM optional",
+  "p01": {
+    "session": "3a0b48ea4e9dae20",
+    "historical_agent": "b09063f",
+    "notice_days": 51,
+    "contract_notice_days": 90,
+    "verified_claims": 5,
+    "cited_claims": 5,
+    "payment_days": [
+      45,
+      14
+    ],
+    "unit_prices_eur": [
+      137.9,
+      132.4
+    ],
+    "source": "https://github.com/IchamRaison/hollerau-agent/blob/4fabd5764257fc15890bd2ef19040c96ed795a86/analysis/pegasus_data/sessions/P01-3a0b48ea4e9dae20.json"
+  },
+  "term_grid": {
+    "min": 15,
+    "max": 75,
+    "practice_cases": 19,
+    "type": "offline descriptive X10",
+    "source": "https://github.com/IchamRaison/ehl-finale-vault/blob/4399dd9f182ed68968538e9695cdc6ca1bea0339/03%20Build/Exp%C3%A9riences.md"
+  },
+  "rehearsal": {
+    "completed": 21,
+    "cases": 21,
+    "parallel": 10,
+    "crashes": 0,
+    "timeouts": 0,
+    "median_decide_ms": 55,
+    "max_decide_ms": 880,
+    "decision_calls": 144,
+    "cap_seconds": 60,
+    "type": "local simulator; not negotiation quality",
+    "source": "https://github.com/IchamRaison/ehl-finale-vault/blob/4399dd9f182ed68968538e9695cdc6ca1bea0339/04%20D%C3%A9mo/Runbook%20finale%20-%20op%C3%A9rateur%20Nevil.md"
+  },
+  "rejected_model": {
+    "archived_sessions": 137,
+    "cases": 8,
+    "required_error_pct": 2,
+    "observed_error_pct": 8.6,
+    "error_unit": "percent of opening price",
+    "validation": "leave one case out",
+    "status": "rejected",
+    "r4_rejected_ideas": 3,
+    "source": "https://github.com/IchamRaison/ehl-finale-vault/blob/4399dd9f182ed68968538e9695cdc6ca1bea0339/03%20Build/Exp%C3%A9riences.md"
+  },
+  "timings_seconds": [
+    20,
+    45,
+    55,
+    70,
+    50,
+    60
+  ]
+}
